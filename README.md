@@ -18,8 +18,7 @@ Hands-on **Exploratory Data Analysis (EDA)** projects on real-world datasets fro
 | 6 | **Flight Price Analysis** | [Flight Price Prediction](https://www.kaggle.com/datasets/shubhambathwal/flight-price-prediction) | [`flight_price.ipynb`](./flight_price.ipynb) | Cleaning, datetime parsing, feature engineering, IQR outliers, groupby & pivot tables, heatmap, EDA dashboard | ✅ Completed |
 | 7 | **Google Play Store Apps** | [Google Play Store Apps](https://www.kaggle.com/datasets/lava18/google-play-store-apps) | [`playstore_apps_complete.ipynb`](./playstore_apps_complete.ipynb) | Cleaning, category / price / installs analysis, correlation, visualizations | ✅ Completed |
 | 8 | **Red Wine Quality** | [Red Wine Quality](https://www.kaggle.com/datasets/uciml/red-wine-quality-cortez-et-al-2009) | [`red.ipynb`](./red.ipynb) | Data quality checks, duplicates, feature engineering | ✅ Completed |
-| 9 | **Sales & Marketing Customer Churn** | [Kaggle link](https://www.kaggle.com/datasets) 
-| [`smot.ipynb`](./smot.ipynb) | Missing values, outlier capping, string cleaning, SMOTE | ✅ Completed |
+| 9 | **Sales & Marketing Customer Churn** | [Kaggle link](https://www.kaggle.com/datasets) *( dataset link)* | [`smot.ipynb`](./smot.ipynb) | Missing values, outlier capping, string cleaning, SMOTE | ✅ Completed |
 | 10 | **Online Retail II** | [Online Retail II (UCI)](https://www.kaggle.com/datasets/mashlyn/online-retail-ii-uci) | [`retail.ipynb`](./retail.ipynb) | Excel loading, combining yearly sheets, KPI analysis | ✅ Completed |
 | 11 | **COVID-19 in India** | [COVID-19 in India](https://www.kaggle.com/datasets/sudalairajkumar/covid19-in-india) | [`covid_19.ipynb`](./covid_19.ipynb) | Statewise testing data analysis | ✅ Completed |
 
@@ -108,10 +107,6 @@ Import → Load → head/tail/shape/info/describe → Missing values → Duplica
 
 ---
 
-Open any notebook and run all cells.
-
----
-
 ## 🔮 Future Improvements
 
 - Sentiment analysis using the Play Store user reviews dataset
@@ -128,9 +123,9 @@ All datasets belong to their original owners (Kaggle, UCI Machine Learning Repos
 
 ## 👤 About Me
 
-**Sufyan**: CS student | Data & AI enthusiast
+**Sufyan**: CS student | Full-stack developer | Data & AI enthusiast
 
-- 💼 LinkedIn: [your-linkedin-url] (www.linkedin.com/in/sksufyan01)
+- 💼 LinkedIn: [your-linkedin-url](https://.linkedin.com/in/sksufyan01)
 - 🐙 GitHub: [your-github-username](https://github.com/hello.sufyan01)
 
 ⭐ If you found this useful, consider giving the repo a star!
