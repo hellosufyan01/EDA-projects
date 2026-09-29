@@ -127,9 +127,9 @@ All datasets belong to their original owners (Kaggle, UCI Machine Learning Repos
 
 ## 👤 About Me
 
-**Sufyan**: CS student | Full-stack developer | Data & AI enthusiast
+**Sufyan**: CS student | Data & AI enthusiast
 
-- 💼 LinkedIn: [your-linkedin-url](https://linkedin.com/in/your-profile)
-- 🐙 GitHub: [your-github-username](https://github.com/your-username)
+- 💼 LinkedIn: [your-linkedin-url] (www.linkedin.com/in/sksufyan01)
+- 🐙 GitHub: [your-github-username](https://github.com/hello.sufyan01)
 
 ⭐ If you found this useful, consider giving the repo a star!
