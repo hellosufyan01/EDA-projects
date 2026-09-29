@@ -1,4 +1,3 @@
-[README.md](https://github.com/user-attachments/files/32817555/README.md)
 # 📊 Data Analysis & EDA Portfolio
 
 Hands-on **Exploratory Data Analysis (EDA)** projects on real-world datasets from Kaggle and UCI. Every project follows the same workflow: **load → inspect → clean → transform → engineer features → visualize → insights**.
@@ -107,20 +106,6 @@ Import → Load → head/tail/shape/info/describe → Missing values → Duplica
 ![Jupyter](https://img.shields.io/badge/Jupyter-F37626?logo=jupyter&logoColor=white)
 
 ---
-
-## 🚀 How to Run
-
-```bash
-# 1. Clone the repo
-git clone https://github.com/<your-username>/<your-repo-name>.git
-cd <your-repo-name>
-
-# 2. Install dependencies
-pip install numpy pandas matplotlib seaborn scikit-learn imbalanced-learn openpyxl jupyter
-
-# 3. Launch Jupyter
-jupyter notebook
-```
 
 Open any notebook and run all cells.
 
