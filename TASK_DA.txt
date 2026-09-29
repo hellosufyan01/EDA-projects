@@ -1,0 +1,280 @@
+
+Data Cleaning → Missing Values → Transformation → EDA → Visualization using Matplotlib & Seaborn
+
+For each dataset, 10–15 practical tasks,  as mini-projects.
+
+1. Titanic Dataset — 
+
+Titanic dataset
+
+Best for: Learning the fundamentals of cleaning, missing values, categorical variables, and EDA.
+
+Typical columns: Survived, Pclass, Sex, Age, SibSp, Parch, Fare, Embarked, Cabin
+
+Tasks
+Data Cleaning & Missing Values
+Load the dataset and inspect the first 10 rows.
+Check the number of rows and columns.
+Identify numerical and categorical columns.
+Find the number and percentage of missing values in each column.
+Handle missing values in Age using an appropriate strategy.
+Handle missing values in Embarked.
+Investigate the Cabin column and decide whether to drop or transform it.
+Check for duplicate rows.
+Check for invalid or unusual values in numerical columns.
+Verify the data types of all columns.
+Data Transformation
+Convert Sex into a suitable numerical representation.
+Create an AgeGroup column such as Child, Teen, Adult, and Senior.
+Create a FamilySize column using SibSp + Parch + 1.
+Create an IsAlone column.
+Create fare categories such as Low, Medium, and High.
+EDA & Visualization
+Calculate the overall survival rate.
+Compare survival rate between males and females.
+Compare survival rate across passenger classes.
+Plot the age distribution using a histogram.
+Plot survival counts using a countplot.
+Create a boxplot of Fare by Pclass.
+Create a heatmap showing correlations.
+Analyze survival by AgeGroup.ṇ
+Analyze survival by FamilySize.
+Create a visualization combining Sex, Pclass, and Survived.
+======================================================================================================================
+
+2. Netflix Movies & TV Shows — 
+
+Netflix Titles dataset
+
+Best for: Missing-value handling, strings, dates, categorical data, and interesting visualizations.
+
+Typical columns: show_id, type, title, director, cast, country, date_added, release_year, rating, duration, listed_in
+
+Tasks
+Data Cleaning
+Load the dataset and inspect its structure.
+Find missing values and calculate their percentages.
+Identify columns with a high percentage of missing values.
+Decide how to handle missing values in director.
+Handle missing values in country.
+Handle missing values in cast.
+Handle missing values in rating.
+Remove duplicate records.
+Convert date_added into a datetime column.
+Clean whitespace and inconsistent text values.
+Data Transformation
+Extract year_added and month_added from date_added.
+Separate Movies and TV Shows using the type column.
+Extract the numerical value from duration.
+Create a duration_type column containing Minutes or Seasons.
+Create a simplified genre/category column from listed_in.
+EDA & Visualization
+Count Movies vs TV Shows.
+Plot the number of titles added to Netflix by year.
+Find the top 10 countries producing Netflix content.
+Find the top 10 genres.
+Plot movie duration distribution.
+Analyze Netflix content by release year.
+Compare Movies vs TV Shows by year.
+Plot ratings using a countplot.
+Create a heatmap of relevant numerical correlations.
+Create a dashboard-style figure containing 4–6 different plots.
+
+====================================================================================================================
+
+3. Airbnb NYC — 
+
+New York City Airbnb Open Data
+
+Best for: Real-world messy data, missing values, outliers, transformations, and advanced EDA.
+
+Typical columns: id, name, host_id, neighbourhood_group, neighbourhood, latitude, longitude, room_type, price, minimum_nights, number_of_reviews, reviews_per_month, calculated_host_listings_count, availability_365
+
+Tasks
+Data Cleaning & Missing Values
+Load and inspect the dataset.
+Check dimensions and data types.
+Calculate missing values and missing percentages.
+Investigate missing values in reviews_per_month.
+Investigate missing values in name and host_name.
+Decide how to handle missing values appropriately.
+Check for duplicate listing IDs.
+Identify invalid prices such as price <= 0.
+Identify unrealistic values in minimum_nights.
+Detect outliers in price.
+Data Transformation
+Apply a log transformation to price.
+Create price categories such as Budget, Moderate, Expensive, and Luxury.
+Create a review_rate or similar useful derived metric.
+Normalize/standardize selected numerical columns.
+Create a host-level metric based on calculated_host_listings_count.
+EDA & Visualization
+Find the average Airbnb price by borough.
+Compare prices by room_type.
+Plot the distribution of Airbnb prices.
+Create a boxplot of price by neighbourhood group.
+Plot Airbnb locations using latitude and longitude.
+Find the top 10 neighbourhoods by number of listings.
+Compare average price between room types.
+Analyze the relationship between price and number of reviews.
+Create a correlation heatmap.
+Identify the most expensive neighbourhoods and visualize them.
+
+=====================================================================================================================
+
+4. Superstore Sales Dataset —
+
+Sample Superstore dataset
+
+Best for: Business analytics, dates, numerical transformations, aggregation, and EDA.
+
+Typical columns: Order Date, Ship Date, Category, Sub-Category, Sales, Quantity, Discount, Profit, Region, State, Segment
+
+Tasks
+Data Cleaning
+Load the dataset and inspect the structure.
+Check for duplicate orders/records.
+Identify missing values.
+Check data types.
+Convert Order Date and Ship Date to datetime.
+Check for negative or zero sales.
+Check for unusual profit values.
+Check categorical columns for inconsistent spelling/capitalization.
+Check whether Order ID contains duplicates and determine whether they represent multiple products.
+Detect outliers in Sales and Profit.
+Data Transformation
+Create Order_Year and Order_Month.
+Calculate Shipping_Days.
+Create a Profit_Margin column:
+Profit_Margin = Profit / Sales
+
+Create sales categories such as Low, Medium, and High.
+Create a monthly/yearly aggregated sales DataFrame.
+EDA & Visualization
+Calculate total Sales, Profit, and Quantity.
+Find the most profitable product categories.
+Compare Sales vs Profit by category.
+Analyze monthly sales trends.
+Find the top 10 products by Sales.
+Find the top 10 products by Profit.
+Compare Sales across regions.
+Plot Sales vs Profit using a scatterplot.
+Create a correlation heatmap.
+Create a 2×2 visualization dashboard showing sales trends, categories, regions, and profit.
+
+===================================================================================================================
+
+5. Medical Appointment No Shows — 
+
+Medical Appointment No Shows dataset
+
+Best for: Data cleaning, categorical transformation, date handling, feature engineering, and EDA.
+
+Typical columns: PatientId, AppointmentID, Gender, ScheduledDay, AppointmentDay, Age, Neighbourhood, Scholarship, Hipertension, Diabetes, Alcoholism, Handcap, SMS_received, No-show
+
+Tasks
+Data Cleaning
+Load the dataset and inspect its structure.
+Check for missing values.
+Check for duplicate appointments.
+Correct inconsistent column names such as Hipertension if appropriate.
+Convert ScheduledDay to datetime.
+Convert AppointmentDay to datetime.
+Check for invalid ages such as negative values.
+Investigate extremely high ages.
+Check categorical values such as Gender and No-show.
+Verify that binary variables contain valid values.
+Data Transformation
+Calculate the number of days between scheduling and appointment.
+Create an AgeGroup column.
+Convert No-show into a binary numerical variable.
+Create a WaitingTimeCategory.
+Extract appointment weekday from AppointmentDay.
+EDA & Visualization
+Calculate the overall no-show percentage.
+Compare no-show rates by gender.
+Compare no-show rates by age group.
+Analyze no-shows based on SMS reminders.
+Analyze no-shows based on scholarship status.
+Analyze no-shows based on hypertension/diabetes.
+Plot the age distribution.
+Create a countplot of appointment outcomes.
+Create a heatmap of correlations.
+Analyze how waiting time affects the no-show rate.
+
+
+
+Use this progression:
+----------------------------------------------------
+Order	Dataset	Main Skills	Difficulty
+1	Titanic	Cleaning + Missing Values + Basic EDA	⭐⭐
+2	Netflix	Strings + Dates + Categorical Data	⭐⭐½
+3	Superstore	Business EDA + Aggregation + Dates	⭐⭐⭐
+4	Medical Appointments	Feature Engineering + Categorical Analysis	⭐⭐⭐½
+5	Airbnb NYC	Outliers + Transformation + Advanced EDA	⭐⭐⭐⭐
+
+-----------------------------------------------------
+A good workflow for every dataset
+
+Try to follow this exact sequence rather than jumping straight into plots:
+
+1. Import libraries
+       ↓
+2. Load dataset
+       ↓
+3. Understand the data
+       ↓
+4. df.head()
+5. df.tail()
+6. df.shape
+7. df.info()
+8. df.describe()
+       ↓
+9. Check missing values
+       ↓
+10. Handle missing values
+       ↓
+11. Check duplicates
+       ↓
+12. Fix data types
+       ↓
+13. Detect outliers
+       ↓
+14. Clean categorical/string columns
+       ↓
+15. Data transformation
+       ↓
+16. Feature engineering
+       ↓
+17. Univariate EDA
+       ↓
+18. Bivariate EDA
+       ↓
+19. Multivariate EDA
+       ↓
+20. Matplotlib visualizations
+       ↓
+21. Seaborn visualizations
+       ↓
+22. Correlation analysis
+       ↓
+23. Key insights
+       ↓
+24. Final cleaned dataset
+
+Libraries to practice
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+
+For each project, aim for roughly:
+
+10 cleaning/missing-value tasks
+5 transformation tasks
+10 EDA tasks
+10–15 visualizations
+5–10 written business/data insights
+

@@ -1,0 +1,801 @@
+TASK for online_retail_ii
+# https://archive.ics.uci.edu/dataset/502/online+retail+ii
+-----------------------------------------------------------------------
+
+Absolutely. Here is a **20–25 task student lab** specifically for the **Online Retail II dataset**, covering the complete pipeline:
+
+**Loading → Inspection → Cleaning → Transformation → NumPy → GroupBy → agg → transform → filter → KPI → Univariate → Bivariate → Multivariate EDA → Plotly → Export**
+
+Dataset: **UCI Online Retail II
+[UCI Online Retail II Dataset](https://archive.ics.uci.edu/dataset/502/online+retail+ii?utm_source)
+
+# 🛒 Online Retail II — End-to-End EDA Task Sheet
+
+### Business Scenario
+
+You are working as a **Data Analyst for an online retail company**.
+
+Management wants to understand:
+
+* Sales performance
+* Customer behavior
+* Product performance
+* Country-wise revenue
+* Order patterns
+* Returns/cancellations
+* Monthly trends
+* High-value customers
+* Product demand
+
+You must take the raw dataset and produce a **clean, analysis-ready dataset plus EDA insights**.
+
+---
+
+# PART 1 — DATA LOADING & INSPECTION
+
+## Task 1 — Load the Dataset
+
+Download the Online Retail II Excel dataset.
+
+Load both yearly sheets into separate DataFrames.
+
+Requirements:
+
+* Load 2009–2010 data
+* Load 2010–2011 data
+* Display first 5 rows of each
+* Display their shapes
+
+**Expected skills:**
+
+```text
+pd.read_excel()
+head()
+shape
+```
+
+---
+
+## Task 2 — Combine the Datasets
+
+Combine both yearly DataFrames into one DataFrame called:
+
+```python
+retail
+```
+
+Requirements:
+
+* Use `pd.concat()`
+* Reset the index
+* Display shape
+* Display first and last 5 records
+
+---
+
+## Task 3 — Basic Data Inspection
+
+Perform a complete inspection.
+
+Find:
+
+* Number of rows
+* Number of columns
+* Column names
+* Data types
+* Memory usage
+* Statistical summary
+
+Use:
+
+```python
+shape
+columns
+info()
+describe()
+```
+
+---
+
+## Task 4 — Data Dictionary
+
+Create a small data dictionary explaining each column.
+
+Example:
+
+| Column      | Meaning              |
+| ----------- | -------------------- |
+| Invoice     | Invoice/order number |
+| StockCode   | Product code         |
+| Description | Product description  |
+| Quantity    | Quantity purchased   |
+| InvoiceDate | Order date/time      |
+| Price       | Unit price           |
+| Customer ID | Customer identifier  |
+| Country     | Customer country     |
+
+Create the dictionary as a Python DataFrame.
+
+---
+
+# PART 2 — DATA QUALITY
+
+## Task 5 — Missing Value Analysis
+
+Identify missing values in every column.
+
+Calculate:
+
+* Missing count
+* Missing percentage
+
+Create a DataFrame:
+
+```text
+Column
+Missing_Count
+Missing_Percentage
+```
+
+Sort by highest missing percentage.
+
+---
+
+## Task 6 — Duplicate Analysis
+
+Find duplicate records.
+
+Calculate:
+
+```text
+Total duplicate rows
+Duplicate percentage
+```
+
+Display at least 10 duplicate records.
+
+Then remove duplicate records.
+
+---
+
+## Task 7 — Clean Product Descriptions
+
+Clean the `Description` column.
+
+Perform:
+
+* Missing value treatment
+* Convert to uppercase
+* Remove leading/trailing spaces
+* Remove unnecessary extra spaces
+
+Example:
+
+```text
+"  WHITE HANGING HEART  "
+```
+
+should become:
+
+```text
+"WHITE HANGING HEART"
+```
+
+---
+
+## Task 8 — Validate Data Types
+
+Check the data types of:
+
+```text
+Invoice
+StockCode
+Quantity
+InvoiceDate
+Price
+Customer ID
+Country
+```
+
+Convert:
+
+* `InvoiceDate` → datetime
+* `Customer ID` → appropriate type
+* `Quantity` → numeric
+* `Price` → numeric
+
+---
+
+# PART 3 — BUSINESS DATA CLEANING
+
+## Task 9 — Identify Cancelled Orders
+
+Investigate invoices beginning with:
+
+```text
+C
+```
+
+Determine what they represent.
+
+Calculate:
+
+* Number of cancelled invoices
+* Cancelled transactions
+* Cancelled quantity
+
+Create:
+
+```python
+IsCancelled
+```
+
+where:
+
+```text
+1 = Cancelled
+0 = Normal
+```
+
+Use NumPy.
+
+---
+
+## Task 10 — Identify Invalid Transactions
+
+Find records where:
+
+```text
+Quantity <= 0
+```
+
+and:
+
+```text
+Price <= 0
+```
+
+Calculate the number of invalid records.
+
+Create a cleaned DataFrame containing only valid sales transactions.
+
+---
+
+# PART 4 — FEATURE ENGINEERING
+
+## Task 11 — Create Revenue
+
+Create:
+
+```python
+Revenue
+```
+
+using:
+
+```text
+Quantity × Price
+```
+
+Then calculate:
+
+* Total revenue
+* Average transaction revenue
+* Minimum revenue
+* Maximum revenue
+
+---
+
+## Task 12 — Create Date Features
+
+From `InvoiceDate`, create:
+
+```text
+Year
+Month
+MonthName
+Day
+DayName
+Hour
+Week
+Quarter
+```
+
+Use pandas datetime functions.
+
+---
+
+## Task 13 — Create Order-Level Features
+
+Create an order-level DataFrame containing:
+
+```text
+Invoice
+Customer ID
+InvoiceDate
+Country
+OrderRevenue
+OrderQuantity
+UniqueProducts
+```
+
+Use appropriate aggregation.
+
+---
+
+## Task 14 — Create Customer Segments
+
+Calculate each customer's total revenue.
+
+Create customer segments using NumPy.
+
+Example:
+
+```text
+Revenue < 100       → Low Value
+100–500              → Regular
+500–2000             → High Value
+> 2000              → VIP
+```
+
+Use:
+
+```python
+np.select()
+```
+
+---
+
+# PART 5 — GROUPBY / AGG / TRANSFORM / FILTER
+
+## Task 15 — Country Performance Analysis
+
+Group the data by:
+
+```text
+Country
+```
+
+Calculate:
+
+* Total Revenue
+* Total Quantity
+* Number of Orders
+* Number of Customers
+* Average Order Value
+
+Use:
+
+```python
+groupby()
+agg()
+```
+
+Sort by revenue descending.
+
+---
+
+## Task 16 — Product Performance
+
+Group by:
+
+```text
+StockCode
+Description
+```
+
+Calculate:
+
+* Total quantity sold
+* Total revenue
+* Number of orders
+* Average selling price
+
+Find:
+
+```text
+Top 20 products by revenue
+```
+
+---
+
+## Task 17 — Customer Revenue Transformation
+
+Calculate each customer's total revenue.
+
+Then use:
+
+```python
+transform()
+```
+
+to add:
+
+```python
+CustomerTotalRevenue
+```
+
+back to the transaction-level dataset.
+
+Verify that every transaction belonging to the same customer has the same customer total revenue.
+
+---
+
+## Task 18 — Country Filtering
+
+Use:
+
+```python
+groupby().filter()
+```
+
+to identify countries whose:
+
+```text
+Total Revenue > chosen threshold
+```
+
+You should determine a reasonable threshold from the data rather than blindly choosing one.
+
+---
+
+# PART 6 — KPI ANALYSIS
+
+## Task 19 — Build a KPI Summary
+
+Create a KPI dictionary/DataFrame containing:
+
+### Sales KPIs
+
+* Total Revenue
+* Total Quantity Sold
+* Total Orders
+* Average Order Value
+* Average Transaction Value
+
+### Customer KPIs
+
+* Total Customers
+* Average Revenue per Customer
+* Top Customer Revenue
+
+### Product KPIs
+
+* Unique Products
+* Top Product Revenue
+* Average Product Price
+
+### Geography KPIs
+
+* Number of Countries
+* Top Country Revenue
+
+Display all KPIs clearly.
+
+---
+
+# PART 7 — UNIVARIATE ANALYSIS
+
+## Task 20 — Numerical Variable Analysis
+
+Perform univariate analysis for:
+
+```text
+Quantity
+Price
+Revenue
+```
+
+For each variable calculate:
+
+* Mean
+* Median
+* Standard deviation
+* Minimum
+* Maximum
+* Q1
+* Q3
+* IQR
+
+Create:
+
+### Histogram
+
+Use:
+
+```python
+seaborn.histplot()
+```
+
+### Boxplot
+
+Use:
+
+```python
+seaborn.boxplot()
+```
+
+### Distribution visualization
+
+Use Plotly where appropriate.
+
+---
+
+# PART 8 — BIVARIATE ANALYSIS
+
+## Task 21 — Product & Revenue Relationship
+
+Investigate the relationship between:
+
+```text
+Quantity
+Revenue
+```
+
+Create:
+
+* Scatter plot
+* Correlation value
+
+Use:
+
+```python
+sns.scatterplot()
+```
+
+Then create an interactive Plotly scatter plot.
+
+---
+
+## Task 22 — Country vs Revenue
+
+Find the top 15 countries by revenue.
+
+Create:
+
+### Matplotlib bar chart
+
+and
+
+### Plotly interactive bar chart
+
+Answer:
+
+1. Which countries generate the most revenue?
+2. Which countries have high transaction volume?
+3. Does high quantity necessarily mean high revenue?
+
+---
+
+# PART 9 — MULTIVARIATE ANALYSIS
+
+## Task 23 — Correlation & Heatmap
+
+Select relevant numerical columns:
+
+```text
+Quantity
+Price
+Revenue
+```
+
+Calculate their correlation matrix.
+
+Create:
+
+```python
+sns.heatmap()
+```
+
+with:
+
+* Annotations
+* Appropriate formatting
+* Title
+
+Then explain the strongest relationships.
+
+---
+
+## Task 24 — Monthly Business Analysis
+
+Create a monthly summary containing:
+
+```text
+Month
+Revenue
+Quantity
+Orders
+Customers
+```
+
+Analyze monthly performance.
+
+Create a Plotly visualization showing:
+
+```text
+Month vs Revenue
+```
+
+Add:
+
+```text
+hover information
+markers
+title
+axis labels
+```
+
+Then create another visualization comparing:
+
+```text
+Month vs Revenue vs Quantity
+```
+
+---
+
+# PART 10 — FINAL BUSINESS ANALYSIS
+
+## Task 25 — Final EDA Dashboard + Export
+
+Create a mini interactive Plotly dashboard-style analysis containing at least:
+
+### Chart 1
+
+**Monthly Revenue Trend**
+
+```text
+Line chart
+```
+
+### Chart 2
+
+**Top 10 Products**
+
+```text
+Bar chart
+```
+
+### Chart 3
+
+**Top 10 Countries**
+
+```text
+Bar chart
+```
+
+### Chart 4
+
+**Revenue Distribution**
+
+```text
+Histogram
+```
+
+### Chart 5
+
+**Quantity vs Revenue**
+
+```text
+Scatter plot
+```
+
+### Chart 6
+
+**Country × Monthly Revenue**
+
+```text
+Heatmap
+```
+
+---
+
+# FINAL EXPORT REQUIREMENTS
+
+Export the cleaned datasets.
+
+### File 1
+
+```text
+Online_Retail_Clean.csv
+```
+
+### File 2
+
+```text
+Online_Retail_Clean.xlsx
+```
+
+### File 3
+
+```text
+Customer_Summary.csv
+```
+
+### File 4
+
+```text
+Product_Summary.csv
+```
+
+### File 5
+
+```text
+Country_Summary.csv
+```
+
+### File 6
+
+```text
+Monthly_Sales_Summary.csv
+```
+
+---
+
+# 🔥 Final Business Questions
+
+After completing all 25 tasks, answer these questions using **data + visual evidence**:
+
+### Customer
+
+1. How many unique customers are there?
+2. What percentage of revenue comes from high-value/VIP customers?
+3. Which customers generate the most revenue?
+
+### Product
+
+4. Which products generate the highest revenue?
+5. Which products have the highest quantity sold?
+6. Are the highest-selling products also the highest-revenue products?
+
+### Geography
+
+7. Which countries generate the most revenue?
+8. Which countries have the largest customer base?
+9. Is revenue concentrated in a small number of countries?
+
+### Sales
+
+10. Which months generate the highest revenue?
+11. Which months have the highest order volume?
+12. Is there evidence of seasonal sales patterns?
+
+### Transactions
+
+13. What percentage of transactions were cancelled/invalid?
+14. What is the average order value?
+15. What is the distribution of order values?
+
+### Relationships
+
+16. Is quantity strongly related to revenue?
+17. Is price related to quantity?
+18. Which numerical variables show the strongest correlation?
+
+---
+
+
+read_excel()
+concat()
+head()
+tail()
+info()
+describe()
+isnull()
+duplicated()
+drop_duplicates()
+fillna()
+astype()
+to_datetime()
+groupby()
+agg()
+transform()
+filter()
+sort_values()
+merge()
+pivot_table()
+
+
+
+
+

@@ -1,0 +1,1684 @@
+🚢 Titanic Dataset — Complete Data Cleaning + Transformation + EDA Lab
+
+### Learning Flow
+
+```text
+1. Import Libraries
+        ↓
+2. Load Dataset
+        ↓
+3. Understand Data
+        ↓
+4. head()
+5. tail()
+6. shape
+7. info()
+8. describe()
+        ↓
+9. Missing Values
+        ↓
+10. Handle Missing Values
+        ↓
+11. Duplicate Check
+        ↓
+12. Fix Data Types
+        ↓
+13. Detect Outliers
+        ↓
+14. Clean Categorical/String Columns
+        ↓
+15. Data Transformation
+        ↓
+16. Feature Engineering
+        ↓
+17. Univariate EDA
+        ↓
+18. Bivariate EDA
+        ↓
+19. Multivariate EDA
+        ↓
+20. Matplotlib Visualizations
+        ↓
+21. Seaborn Visualizations
+        ↓
+22. Correlation Analysis
+        ↓
+23. Key Insights
+        ↓
+24. Final Cleaned Dataset
+```
+
+---
+
+# 1. Import Libraries
+
+### Explanation
+
+We first import the libraries required for:
+
+* Data manipulation → `pandas`
+* Numerical calculations → `numpy`
+* Basic visualization → `matplotlib`
+* Statistical visualization → `seaborn`
+
+### Code
+
+```python
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+%matplotlib inline
+```
+
+### Set visualization style
+
+```python
+sns.set_style("whitegrid")
+```
+
+---
+
+# 2. Load Dataset
+
+For this lab, we can use the Titanic dataset available directly through Seaborn.
+
+### Code
+
+```python
+df = sns.load_dataset("titanic")
+```
+
+Check whether the dataset loaded:
+
+```python
+df.head()
+```
+
+---
+
+# 3. Understand the Data
+
+Before cleaning anything, we need to understand what the dataset contains.
+
+### Display column names
+
+```python
+df.columns
+```
+
+Expected columns include:
+
+```text
+survived
+pclass
+sex
+age
+sibsp
+parch
+fare
+embarked
+class
+who
+adult_male
+deck
+embark_town
+alive
+alone
+```
+
+> Note: This version of the Titanic dataset has slightly different columns from the commonly used Kaggle Titanic dataset. We will work with the columns available in this dataset.
+
+---
+
+# 4. `df.head()`
+
+The `head()` function displays the first rows.
+
+### First 5 rows
+
+```python
+df.head()
+```
+
+### First 10 rows
+
+```python
+df.head(10)
+```
+
+### Why?
+
+It helps us understand:
+
+* Column names
+* Data format
+* Sample values
+* Possible missing values
+* Categorical values
+
+---
+
+# 5. `df.tail()`
+
+Display the last 5 rows.
+
+```python
+df.tail()
+```
+
+Display last 10 rows:
+
+```python
+df.tail(10)
+```
+
+### Why?
+
+This helps verify the end of the dataset and can sometimes reveal unusual values or formatting issues.
+
+---
+
+# 6. `df.shape`
+
+Check the number of rows and columns.
+
+```python
+df.shape
+```
+
+Output will look similar to:
+
+```text
+(891, 12)
+```
+
+Meaning:
+
+```text
+891 rows
+12 columns
+```
+
+You can separately print them:
+
+```python
+print("Number of rows:", df.shape[0])
+print("Number of columns:", df.shape[1])
+```
+
+---
+
+# 7. `df.info()`
+
+This is one of the most important commands during data understanding.
+
+```python
+df.info()
+```
+
+It tells us:
+
+* Column names
+* Number of non-null values
+* Data types
+* Memory usage
+
+For example:
+
+```text
+age             714 non-null    float64
+embarked        889 non-null    object
+```
+
+This immediately tells us that missing values exist.
+
+---
+
+# 8. `df.describe()`
+
+### Numerical summary
+
+```python
+df.describe()
+```
+
+This gives:
+
+* Count
+* Mean
+* Standard deviation
+* Minimum
+* 25%
+* Median
+* 75%
+* Maximum
+
+### Include categorical columns
+
+```python
+df.describe(include="all")
+```
+
+This is useful for understanding both numerical and categorical columns.
+
+---
+
+# 9. Check Missing Values
+
+Now we specifically investigate missing data.
+
+### Missing values per column
+
+```python
+df.isnull().sum()
+```
+
+### Missing percentage
+
+```python
+missing_count = df.isnull().sum()
+
+missing_percentage = (missing_count / len(df)) * 100
+
+missing_table = pd.DataFrame({
+    "Missing Count": missing_count,
+    "Missing Percentage": missing_percentage
+})
+
+missing_table
+```
+
+### Better formatted version
+
+```python
+missing_table = missing_table.sort_values(
+    by="Missing Percentage",
+    ascending=False
+)
+
+missing_table
+```
+
+---
+
+# 10. Handle Missing Values
+
+Now we decide what to do with missing values.
+
+---
+
+## 10.1 Missing Age
+
+First check:
+
+```python
+df["age"].isnull().sum()
+```
+
+Age is numerical.
+
+A common simple strategy is to replace missing age with the **median**.
+
+Why median?
+
+Because age can contain extreme values, and median is less affected by outliers than mean.
+
+### Code
+
+```python
+age_median = df["age"].median()
+
+df["age"] = df["age"].fillna(age_median)
+```
+
+Check again:
+
+```python
+df["age"].isnull().sum()
+```
+
+Expected:
+
+```text
+0
+```
+
+---
+
+## 10.2 Missing Embarked
+
+Check:
+
+```python
+df["embarked"].isnull().sum()
+```
+
+Since `embarked` is categorical, we can use the **mode**.
+
+```python
+embarked_mode = df["embarked"].mode()[0]
+
+df["embarked"] = df["embarked"].fillna(embarked_mode)
+```
+
+Check:
+
+```python
+df["embarked"].isnull().sum()
+```
+
+Expected:
+
+```text
+0
+```
+
+---
+
+# 10.3 Investigate Cabin / Deck
+
+The Seaborn dataset contains `deck` rather than the original `Cabin` column.
+
+Check missing values:
+
+```python
+df["deck"].isnull().sum()
+```
+
+Percentage:
+
+```python
+df["deck"].isnull().mean() * 100
+```
+
+The column has a very large amount of missing data.
+
+Instead of trying to fill every missing cabin/deck value, we can create a simpler feature:
+
+```text
+HasCabin
+```
+
+### Create `HasCabin`
+
+```python
+df["HasCabin"] = df["deck"].notnull().astype(int)
+```
+
+Meaning:
+
+```text
+1 = Cabin/Deck information available
+0 = Cabin/Deck information missing
+```
+
+Now we can drop the original `deck` column.
+
+```python
+df.drop("deck", axis=1, inplace=True)
+```
+
+---
+
+# 11. Check Duplicate Rows
+
+Check number of duplicate rows:
+
+```python
+df.duplicated().sum()
+```
+
+Display duplicates:
+
+```python
+df[df.duplicated()]
+```
+
+### Remove duplicates
+
+If duplicates are confirmed to be accidental:
+
+```python
+df.drop_duplicates(inplace=True)
+```
+
+Check again:
+
+```python
+df.duplicated().sum()
+```
+
+Expected:
+
+```text
+0
+```
+
+### Important
+
+In real-world datasets, don't automatically delete duplicates.
+
+First ask:
+
+> Are these genuinely duplicate records or legitimate repeated observations?
+
+---
+
+# 12. Fix Data Types
+
+Check data types:
+
+```python
+df.dtypes
+```
+
+We can also inspect each data type:
+
+```python
+print(df.dtypes)
+```
+
+---
+
+## Convert categorical columns
+
+For example:
+
+```python
+categorical_columns = [
+    "sex",
+    "embarked",
+    "class",
+    "who",
+    "embark_town",
+    "alive"
+]
+
+for col in categorical_columns:
+    df[col] = df[col].astype("category")
+```
+
+Check:
+
+```python
+df.dtypes
+```
+
+---
+
+# 13. Detect Outliers
+
+We now investigate unusual numerical values.
+
+Important numerical columns:
+
+```python
+numerical_columns = [
+    "age",
+    "fare",
+    "sibsp",
+    "parch",
+    "family_size"
+]
+```
+
+But `family_size` doesn't exist yet.
+
+So initially check:
+
+```python
+df[["age", "fare", "sibsp", "parch"]].describe()
+```
+
+---
+
+## 13.1 IQR Method
+
+The IQR method is commonly used for detecting outliers.
+
+Formula:
+
+```text
+IQR = Q3 - Q1
+
+Lower Bound = Q1 - 1.5 × IQR
+
+Lower Bound = Q1 - 1.5 × IQR
+```
+
+Create a function:
+
+```python
+def detect_outliers_iqr(data, column):
+    Q1 = data[column].quantile(0.25)
+    Q3 = data[column].quantile(0.75)
+
+    IQR = Q3 - Q1
+
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+
+    outliers = data[
+        (data[column] < lower_bound) |
+        (data[column] > upper_bound)
+    ]
+
+    print("Column:", column)
+    print("Q1:", Q1)
+    print("Q3:", Q3)
+    print("IQR:", IQR)
+    print("Lower Bound:", lower_bound)
+    print("Upper Bound:", upper_bound)
+    print("Number of Outliers:", len(outliers))
+    
+    return outliers
+```
+
+---
+
+## Check Age
+
+```python
+age_outliers = detect_outliers_iqr(df, "age")
+```
+
+---
+
+## Check Fare
+
+```python
+fare_outliers = detect_outliers_iqr(df, "fare")
+```
+
+---
+
+## Check SibSp
+
+```python
+sibsp_outliers = detect_outliers_iqr(df, "sibsp")
+```
+
+---
+
+## Check Parch
+
+```python
+parch_outliers = detect_outliers_iqr(df, "parch")
+```
+
+### Important Titanic lesson
+
+We should **not automatically delete all outliers**.
+
+For example, a very high fare may represent a real first-class passenger.
+
+Therefore, we identify and investigate outliers rather than blindly removing them.
+
+---
+
+# 14. Clean Categorical/String Columns
+
+First inspect unique values.
+
+### Sex
+
+```python
+df["sex"].unique()
+```
+
+### Embarked
+
+```python
+df["embarked"].unique()
+```
+
+### Class
+
+```python
+df["class"].unique()
+```
+
+### Who
+
+```python
+df["who"].unique()
+```
+
+### Embark Town
+
+```python
+df["embark_town"].unique()
+```
+
+---
+
+## Check whitespace
+
+For object/string columns:
+
+```python
+for col in df.select_dtypes(include="object").columns:
+    print(col, df[col].unique())
+```
+
+If a dataset contains unwanted spaces, we could use:
+
+```python
+df[col] = df[col].str.strip()
+```
+
+Our categorical columns are already fairly clean, but this is an important real-world cleaning step.
+
+---
+
+# 15. Data Transformation
+
+Now we transform the data into forms that are easier to analyze.
+
+---
+
+# 15.1 Convert Sex to Numerical Representation
+
+Original:
+
+```text
+male
+female
+```
+
+Convert:
+
+```text
+male   → 0
+female → 1
+```
+
+### Code
+
+```python
+df["Sex_numeric"] = df["sex"].map({
+    "male": 0,
+    "female": 1
+})
+```
+
+Check:
+
+```python
+df[["sex", "Sex_numeric"]].head()
+```
+
+---
+
+# 15.2 Convert Embarked into Numerical Representation
+
+```python
+df["Embarked_numeric"] = df["embarked"].map({
+    "C": 0,
+    "Q": 1,
+    "S": 2
+})
+```
+
+Check:
+
+```python
+df[["embarked", "Embarked_numeric"]].head()
+```
+
+---
+
+# 16. Feature Engineering
+
+Feature engineering means creating new useful variables from existing data.
+
+---
+
+# 16.1 Create FamilySize
+
+Formula:
+
+```text
+FamilySize = SibSp + Parch + 1
+```
+
+Why `+1`?
+
+Because the passenger themselves is also part of the family.
+
+### Code
+
+```python
+df["FamilySize"] = df["sibsp"] + df["parch"] + 1
+```
+
+Check:
+
+```python
+df[["sibsp", "parch", "FamilySize"]].head()
+```
+
+---
+
+# 16.2 Create IsAlone
+
+If:
+
+```text
+FamilySize = 1
+```
+
+the passenger is travelling alone.
+
+### Code
+
+```python
+df["IsAlone"] = np.where(
+    df["FamilySize"] == 1,
+    1,
+    0
+)
+```
+
+Check:
+
+```python
+df[["FamilySize", "IsAlone"]].head()
+```
+
+---
+
+# 16.3 Create AgeGroup
+
+We need categories:
+
+```text
+Child
+Teen
+Adult
+Senior
+```
+
+We can define:
+
+```text
+0–12    → Child
+13–19   → Teen
+20–59   → Adult
+60+     → Senior
+```
+
+### Code
+
+```python
+def age_group(age):
+    if age <= 12:
+        return "Child"
+    elif age <= 19:
+        return "Teen"
+    elif age <= 59:
+        return "Adult"
+    else:
+        return "Senior"
+```
+
+Apply:
+
+```python
+df["AgeGroup"] = df["age"].apply(age_group)
+```
+
+Check:
+
+```python
+df[["age", "AgeGroup"]].head(20)
+```
+
+---
+
+# 16.4 Create Fare Categories
+
+We can divide fares into:
+
+```text
+Low
+Medium
+High
+```
+
+Use quantiles so the categories are based on the actual dataset.
+
+```python
+df["FareCategory"] = pd.qcut(
+    df["fare"],
+    q=3,
+    labels=["Low", "Medium", "High"]
+)
+```
+
+Check:
+
+```python
+df[["fare", "FareCategory"]].head(20)
+```
+
+---
+
+# 17. Univariate EDA
+
+Univariate analysis means:
+
+> Studying one variable at a time.
+
+Examples:
+
+* Age
+* Fare
+* Sex
+* Pclass
+* Survived
+* AgeGroup
+
+---
+
+## 17.1 Survival Counts
+
+```python
+df["survived"].value_counts()
+```
+
+---
+
+## 17.2 Sex Counts
+
+```python
+df["sex"].value_counts()
+```
+
+---
+
+## 17.3 Passenger Class Counts
+
+```python
+df["pclass"].value_counts().sort_index()
+```
+
+---
+
+## 17.4 Age Statistics
+
+```python
+df["age"].describe()
+```
+
+---
+
+## 17.5 Fare Statistics
+
+```python
+df["fare"].describe()
+```
+
+---
+
+# 18. Bivariate EDA
+
+Bivariate analysis means:
+
+> Studying the relationship between two variables.
+
+Examples:
+
+```text
+Sex vs Survived
+Pclass vs Survived
+AgeGroup vs Survived
+FamilySize vs Survived
+```
+
+---
+
+# 18.1 Overall Survival Rate
+
+```python
+survival_rate = df["survived"].mean() * 100
+
+print("Overall Survival Rate:", round(survival_rate, 2), "%")
+```
+
+---
+
+# 18.2 Survival Rate by Sex
+
+```python
+survival_by_sex = df.groupby(
+    "sex",
+    observed=True
+)["survived"].mean() * 100
+
+survival_by_sex
+```
+
+---
+
+# 18.3 Survival Rate by Pclass
+
+```python
+survival_by_class = df.groupby(
+    "pclass"
+)["survived"].mean() * 100
+
+survival_by_class
+```
+
+---
+
+# 18.4 Survival by AgeGroup
+
+```python
+survival_by_agegroup = df.groupby(
+    "AgeGroup",
+    observed=True
+)["survived"].mean() * 100
+
+survival_by_agegroup
+```
+
+---
+
+# 18.5 Survival by FamilySize
+
+```python
+survival_by_family = df.groupby(
+    "FamilySize"
+)["survived"].mean() * 100
+
+survival_by_family
+```
+
+---
+
+# 19. Multivariate EDA
+
+Multivariate analysis means analyzing **three or more variables together**.
+
+A very useful Titanic question:
+
+> How does survival vary according to Sex + Pclass?
+
+Create a table:
+
+```python
+pd.crosstab(
+    [df["sex"], df["pclass"]],
+    df["survived"],
+    normalize="index"
+) * 100
+```
+
+This gives survival percentages for combinations such as:
+
+```text
+Female + First Class
+Female + Second Class
+Female + Third Class
+Male + First Class
+Male + Second Class
+Male + Third Class
+```
+
+---
+
+# 20. Matplotlib Visualizations
+
+Now—and only now—we start plotting.
+
+---
+
+## 20.1 Age Distribution — Histogram
+
+```python
+plt.figure(figsize=(8, 5))
+
+plt.hist(df["age"], bins=20)
+
+plt.title("Age Distribution")
+plt.xlabel("Age")
+plt.ylabel("Number of Passengers")
+
+plt.show()
+```
+
+### What are we learning?
+
+We can see how passenger ages are distributed.
+
+---
+
+## 20.2 Fare Distribution
+
+```python
+plt.figure(figsize=(8, 5))
+
+plt.hist(df["fare"], bins=30)
+
+plt.title("Fare Distribution")
+plt.xlabel("Fare")
+plt.ylabel("Number of Passengers")
+
+plt.show()
+```
+
+---
+
+## 20.3 Survival Counts
+
+Using Matplotlib:
+
+```python
+survival_counts = df["survived"].value_counts().sort_index()
+
+plt.figure(figsize=(6, 4))
+
+plt.bar(
+    ["Did Not Survive", "Survived"],
+    survival_counts
+)
+
+plt.title("Survival Counts")
+plt.xlabel("Survival Status")
+plt.ylabel("Number of Passengers")
+
+plt.show()
+```
+
+---
+
+# 21. Seaborn Visualizations
+
+Now we use Seaborn for more statistical plots.
+
+---
+
+# 21.1 Survival Countplot
+
+```python
+plt.figure(figsize=(7, 5))
+
+sns.countplot(
+    data=df,
+    x="survived"
+)
+
+plt.title("Survival Counts")
+plt.xlabel("Survived")
+plt.ylabel("Number of Passengers")
+
+plt.show()
+```
+
+---
+
+# 21.2 Survival by Sex
+
+```python
+plt.figure(figsize=(7, 5))
+
+sns.barplot(
+    data=df,
+    x="sex",
+    y="survived"
+)
+
+plt.title("Survival Rate by Sex")
+plt.xlabel("Sex")
+plt.ylabel("Survival Rate")
+
+plt.show()
+```
+
+---
+
+# 21.3 Survival by Passenger Class
+
+```python
+plt.figure(figsize=(7, 5))
+
+sns.barplot(
+    data=df,
+    x="pclass",
+    y="survived"
+)
+
+plt.title("Survival Rate by Passenger Class")
+plt.xlabel("Passenger Class")
+plt.ylabel("Survival Rate")
+
+plt.show()
+```
+
+---
+
+# 21.4 Age Distribution by Survival
+
+```python
+plt.figure(figsize=(8, 5))
+
+sns.histplot(
+    data=df,
+    x="age",
+    hue="survived",
+    bins=20,
+    kde=True
+)
+
+plt.title("Age Distribution by Survival")
+plt.xlabel("Age")
+plt.ylabel("Count")
+
+plt.show()
+```
+
+---
+
+# 21.5 Boxplot of Fare by Pclass
+
+This is one of your required visualizations.
+
+```python
+plt.figure(figsize=(8, 5))
+
+sns.boxplot(
+    data=df,
+    x="pclass",
+    y="fare"
+)
+
+plt.title("Fare Distribution by Passenger Class")
+plt.xlabel("Passenger Class")
+plt.ylabel("Fare")
+
+plt.show()
+```
+
+### Why boxplot?
+
+It shows:
+
+* Median
+* Q1
+* Q3
+* Spread
+* Potential outliers
+
+---
+
+# 21.6 Survival by AgeGroup
+
+```python
+plt.figure(figsize=(8, 5))
+
+sns.barplot(
+    data=df,
+    x="AgeGroup",
+    y="survived",
+    order=["Child", "Teen", "Adult", "Senior"]
+)
+
+plt.title("Survival Rate by Age Group")
+plt.xlabel("Age Group")
+plt.ylabel("Survival Rate")
+
+plt.show()
+```
+
+---
+
+# 21.7 Survival by FamilySize
+
+```python
+plt.figure(figsize=(9, 5))
+
+sns.barplot(
+    data=df,
+    x="FamilySize",
+    y="survived"
+)
+
+plt.title("Survival Rate by Family Size")
+plt.xlabel("Family Size")
+plt.ylabel("Survival Rate")
+
+plt.show()
+```
+
+---
+
+# 21.8 Sex + Pclass + Survived
+
+This is an important multivariate visualization.
+
+```python
+plt.figure(figsize=(9, 6))
+
+sns.barplot(
+    data=df,
+    x="pclass",
+    y="survived",
+    hue="sex"
+)
+
+plt.title("Survival Rate by Sex and Passenger Class")
+plt.xlabel("Passenger Class")
+plt.ylabel("Survival Rate")
+
+plt.show()
+```
+
+This allows us to simultaneously analyze:
+
+```text
+Passenger Class
+        +
+Sex
+        +
+Survival
+```
+
+---
+
+# 22. Correlation Analysis
+
+Correlation helps us understand relationships between numerical variables.
+
+---
+
+## 22.1 Select Numerical Columns
+
+```python
+numeric_df = df.select_dtypes(
+    include=["int64", "float64"]
+)
+```
+
+Check:
+
+```python
+numeric_df.columns
+```
+
+---
+
+## 22.2 Correlation Matrix
+
+```python
+correlation_matrix = numeric_df.corr()
+
+correlation_matrix
+```
+
+---
+
+## 22.3 Correlation Heatmap
+
+```python
+plt.figure(figsize=(10, 7))
+
+sns.heatmap(
+    correlation_matrix,
+    annot=True,
+    cmap="coolwarm",
+    fmt=".2f"
+)
+
+plt.title("Correlation Heatmap")
+
+plt.show()
+```
+
+### Interpretation
+
+Correlation ranges from:
+
+```text
+-1 → Strong negative relationship
+ 0 → Little/no linear relationship
++1 → Strong positive relationship
+```
+
+Remember:
+
+> Correlation does not automatically mean causation.
+
+---
+
+# 23. Key Insights
+
+Now we turn the analysis into meaningful conclusions.
+
+Run:
+
+```python
+print("Overall Survival Rate:",
+      round(df["survived"].mean() * 100, 2), "%")
+```
+
+### Survival by sex
+
+```python
+print(
+    df.groupby("sex", observed=True)["survived"]
+      .mean()
+      .mul(100)
+      .round(2)
+)
+```
+
+### Survival by class
+
+```python
+print(
+    df.groupby("pclass")["survived"]
+      .mean()
+      .mul(100)
+      .round(2)
+)
+```
+
+### Survival by age group
+
+```python
+print(
+    df.groupby("AgeGroup", observed=True)["survived"]
+      .mean()
+      .mul(100)
+      .round(2)
+)
+```
+
+### Survival by family size
+
+```python
+print(
+    df.groupby("FamilySize")["survived"]
+      .mean()
+      .mul(100)
+      .round(2)
+)
+```
+
+---
+
+## Questions Students Should Answer
+
+### Question 1
+
+What percentage of passengers survived?
+
+```python
+df["survived"].mean() * 100
+```
+
+---
+
+### Question 2
+
+Which sex had the higher survival rate?
+
+```python
+df.groupby(
+    "sex",
+    observed=True
+)["survived"].mean()
+```
+
+---
+
+### Question 3
+
+Which passenger class had the highest survival rate?
+
+```python
+df.groupby(
+    "pclass"
+)["survived"].mean()
+```
+
+---
+
+### Question 4
+
+Which age group had the highest survival rate?
+
+```python
+df.groupby(
+    "AgeGroup",
+    observed=True
+)["survived"].mean()
+```
+
+---
+
+### Question 5
+
+Which family sizes appear to have better survival?
+
+```python
+df.groupby(
+    "FamilySize"
+)["survived"].mean().sort_values(ascending=False)
+```
+
+---
+
+### Question 6
+
+Did higher-class passengers generally pay higher fares?
+
+```python
+df.groupby("pclass")["fare"].mean()
+```
+
+---
+
+### Question 7
+
+What combination of Sex and Pclass had the highest survival?
+
+```python
+df.groupby(
+    ["sex", "pclass"],
+    observed=True
+)["survived"].mean().sort_values(
+    ascending=False
+)
+```
+
+---
+
+# 24. Final Cleaned Dataset
+
+Before finishing, inspect our final dataset.
+
+```python
+df.head()
+```
+
+Check shape:
+
+```python
+df.shape
+```
+
+Check information:
+
+```python
+df.info()
+```
+
+Check missing values:
+
+```python
+df.isnull().sum()
+```
+
+Check duplicates:
+
+```python
+df.duplicated().sum()
+```
+
+---
+
+# Final Dataset Columns
+
+```python
+df.columns.tolist()
+```
+
+You should now have the original useful columns plus engineered features such as:
+
+```text
+survived
+pclass
+sex
+age
+sibsp
+parch
+fare
+embarked
+class
+who
+adult_male
+embark_town
+alive
+alone
+
+HasCabin
+Sex_numeric
+Embarked_numeric
+FamilySize
+IsAlone
+AgeGroup
+FareCategory
+```
+
+---
+
+# Final Data Quality Check
+
+This is a very important final step.
+
+```python
+print("========== FINAL DATA QUALITY CHECK ==========")
+
+print("\nShape:")
+print(df.shape)
+
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+print("\nDuplicate Rows:")
+print(df.duplicated().sum())
+
+print("\nData Types:")
+print(df.dtypes)
+
+print("\nNumerical Summary:")
+display(df.describe())
+```
+
+---
+
+# Save Final Cleaned Dataset
+
+```python
+df.to_csv(
+    "Titanic_Cleaned_EDA.csv",
+    index=False
+)
+```
+
+Now your cleaned dataset is ready for further analysis or machine learning.
+
+---
+
+# 🧠 Complete Titanic Lab Flow
+
+understand the entire project as:
+
+
+                    TITANIC DATASET
+                           │
+                           ▼
+                  IMPORT LIBRARIES
+                           │
+                           ▼
+                    LOAD DATASET
+                           │
+                           ▼
+                  UNDERSTAND DATA
+                           │
+             ┌─────────────┼─────────────┐
+             ▼             ▼             ▼
+          HEAD()         TAIL()        SHAPE
+             │             │             │
+             └─────────────┼─────────────┘
+                           ▼
+                         INFO()
+                           │
+                           ▼
+                       DESCRIBE()
+                           │
+                           ▼
+                  MISSING VALUES
+                           │
+                           ▼
+                  HANDLE MISSING
+                           │
+                           ▼
+                    DUPLICATES
+                           │
+                           ▼
+                     DATA TYPES
+                           │
+                           ▼
+                      OUTLIERS
+                           │
+                           ▼
+                CATEGORICAL CLEANING
+                           │
+                           ▼
+                  DATA TRANSFORMATION
+                           │
+                           ▼
+                 FEATURE ENGINEERING
+                           │
+              ┌────────────┼────────────┐
+              ▼            ▼            ▼
+          UNIVARIATE   BIVARIATE   MULTIVARIATE
+              │            │            │
+              └────────────┼────────────┘
+                           ▼
+                     VISUALIZATION
+                           │
+                ┌──────────┴──────────┐
+                ▼                     ▼
+            MATPLOTLIB             SEABORN
+                │                     │
+                └──────────┬──────────┘
+                           ▼
+                   CORRELATION
+                           │
+                           ▼
+                    KEY INSIGHTS
+                           │
+                           ▼
+               FINAL DATA QUALITY CHECK
+                           │
+                           ▼
+                CLEANED TITANIC DATASET
+```
